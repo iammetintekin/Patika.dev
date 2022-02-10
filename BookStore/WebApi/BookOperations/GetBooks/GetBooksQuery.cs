@@ -9,7 +9,6 @@ namespace WebApi.BookOperations.GetBooks
     public class GetBooksQuery
     {
         private readonly BookStoreDbContext _db;
-
         public GetBooksQuery(BookStoreDbContext db)
         {
             _db = db;
@@ -30,6 +29,7 @@ namespace WebApi.BookOperations.GetBooks
             }
             return vm;
         }
+
     }
 
     public class BooksViewModel

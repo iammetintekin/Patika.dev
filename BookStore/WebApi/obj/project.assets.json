@@ -741,11 +741,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HP\\Desktop\\.NET\\.NETCORE\\BookStore\\webapi\\WebApi.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\Documents\\GitHub\\Patika.dev\\BookStore\\WebApi\\WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "C:\\Users\\HP\\Desktop\\.NET\\.NETCORE\\BookStore\\webapi\\WebApi.csproj",
+      "projectPath": "C:\\Users\\HP\\Documents\\GitHub\\Patika.dev\\BookStore\\WebApi\\WebApi.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HP\\Desktop\\.NET\\.NETCORE\\BookStore\\webapi\\obj\\",
+      "outputPath": "C:\\Users\\HP\\Documents\\GitHub\\Patika.dev\\BookStore\\WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",

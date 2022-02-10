@@ -4,9 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.BookOperations.CreateBook;
+using WebApi.BookOperations.DeleteBook;
+using WebApi.BookOperations.GetBook;
 using WebApi.BookOperations.GetBooks;
+using WebApi.BookOperations.UpdateBook;
 using WebApi.DbOperations;
 using static WebApi.BookOperations.CreateBook.CreateBookCommand;
+using static WebApi.BookOperations.UpdateBook.UpdateBookCommand;
 
 namespace WebApi.Controllers
 {
@@ -30,11 +34,24 @@ namespace WebApi.Controllers
 
         
         [HttpGet("{Id}")]
-        public Book GetById(int Id)
+        public IActionResult GetById(int Id)
         {
-            var book = _db.Books.Where(s=>s.Id==Id).FirstOrDefault();
-            return book;
+            GetBookQuery query = new GetBookQuery(_db);
+           
+            try
+            {
+                query.Id = Id;
+                var result = query.Handle();
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpPost]
         public IActionResult Add([FromBody] CreateBookModel book)
         {
@@ -43,44 +60,49 @@ namespace WebApi.Controllers
             {
                 create.Model = book;
                 create.Handle();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+          
+        }
+
+        [HttpPut]
+        public IActionResult GetById([FromBody] UpdateBookModel book)
+        {
+            UpdateBookCommand update = new UpdateBookCommand(_db);
+            try
+            {
+                update.Model = book;
+                update.Handle();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok();
+
+
+        }
+        [HttpDelete("{Id}")]
+        public IActionResult Delete(int Id)
+        {
+            DeleteBookCommand delete = new DeleteBookCommand(_db);
+            try
+            {
+                delete.Id = Id;
+                delete.Handle();
             }
             catch (Exception ex)
             {
 
                 return BadRequest(ex.Message);
             }
-
-            return Ok();
-        }
-        [HttpPut("{Id}")]
-        public IActionResult GetById(int Id,[FromBody] Book book)
-        {
-            var IsExist = _db.Books.SingleOrDefault(x=>x.Id==Id);
-            if(IsExist is null)
-            {
-                return BadRequest();
-            }
-
-            IsExist.GenreId = book.GenreId != default ? book.GenreId:IsExist.GenreId;
-            //default demek o veriye dokunulduysa yani sıfır değilse bookdan gelen kategory ıd kullan
-            //eğer değiiştiyse kendi kategori ıd kullan
-            IsExist.PublishDate = book.PublishDate != default ? book.PublishDate:IsExist.PublishDate;
-            IsExist.PageCount = book.PageCount != default ? book.PageCount:IsExist.PageCount;
-            IsExist.Title = book.Title != default ? book.Title:IsExist.Title;
-            _db.SaveChanges();
-            return Content($"{IsExist.Title} güncellendi");
-
-        }
-        [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id)
-        {
-            var IsExist = _db.Books.SingleOrDefault(x=>x.Id==Id);
-            if(IsExist is null)
-            {
-                return BadRequest();
-            }
-            _db.Books.Remove(IsExist);
-            _db.SaveChanges();
+            
 
             return Ok();
         }
