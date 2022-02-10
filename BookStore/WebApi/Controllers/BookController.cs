@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.BookOperations.CreateBook;
 using WebApi.BookOperations.DeleteBook;
@@ -19,15 +20,17 @@ namespace WebApi.Controllers
     public class BookController : ControllerBase
     {
         private readonly BookStoreDbContext _db;
-        public BookController(BookStoreDbContext db)
+        private readonly IMapper _mapper;
+        public BookController(BookStoreDbContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            GetBooksQuery query = new GetBooksQuery(_db);
+            GetBooksQuery query = new GetBooksQuery(_db, _mapper);
             var result = query.Handle();
             return Ok(result);
         }
@@ -36,8 +39,7 @@ namespace WebApi.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetById(int Id)
         {
-            GetBookQuery query = new GetBookQuery(_db);
-           
+            GetBookQuery query = new GetBookQuery(_db, _mapper);
             try
             {
                 query.Id = Id;
@@ -55,7 +57,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] CreateBookModel book)
         {
-            CreateBookCommand create = new CreateBookCommand(_db);
+            CreateBookCommand create = new CreateBookCommand(_db,_mapper);
             try
             {
                 create.Model = book;
@@ -70,12 +72,13 @@ namespace WebApi.Controllers
           
         }
 
-        [HttpPut]
-        public IActionResult GetById([FromBody] UpdateBookModel book)
+        [HttpPut("{Id}")]
+        public IActionResult Update(int Id,[FromBody] UpdateBookModel book)
         {
             UpdateBookCommand update = new UpdateBookCommand(_db);
             try
             {
+                update.Id = Id;
                 update.Model = book;
                 update.Handle();
             }
@@ -99,7 +102,6 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
             
