@@ -45,6 +45,9 @@ namespace WebApi.Controllers
             try
             {
                 query.Id = Id;
+                GetBookValidator validate = new GetBookValidator();
+                validate.ValidateAndThrow(query);
+
                 var result = query.Handle();
                 return Ok(result);
 
@@ -101,14 +104,21 @@ namespace WebApi.Controllers
             {
                 update.Id = Id;
                 update.Model = book;
+
+                UpdateBookValidator validate = new UpdateBookValidator();
+                validate.ValidateAndThrow(update);
+
+                
                 update.Handle();
+
+                return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
 
-            return Ok();
+            
 
 
         }
