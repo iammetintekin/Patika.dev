@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using WebApi.DbOperations;
+using WebApi.Middleware;
 
 namespace WebApi
 {
@@ -55,6 +56,8 @@ namespace WebApi
 
             app.UseAuthorization();
 
+            // endpointlerden önce kullanýlmalý
+            app.UseCustomExceptionMiddleware();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

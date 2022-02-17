@@ -84,7 +84,7 @@ namespace Middleware
                 System.Console.WriteLine("Middleware 3 başladı");
                 await next.Invoke();
                 System.Console.WriteLine("Middleware 3 bitti");
-            });*/
+            });
 
             app.UseHello();
             
@@ -102,10 +102,15 @@ namespace Middleware
             app.MapWhen(x=>x.Request.Method=="GET",internallApp=> internallApp.Run(async context => {
                 Console.WriteLine("Mapwhen middleware tetiklendi");
                 await context.Response.WriteAsync("Mapwhen middleware tetiklendi");
-            }));
+            }));*/
            /*
            ekran çıktısı sırasıyla 1, 2, 3 başladı daha sonra 3, 2, 1 bitti şeklinde olacaktır
            */ 
+           /*
+           request endpointe düşmeden önce middleware çağrılmalıdır.
+
+           */
+           app.UseCustomExceptionMiddleware();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
